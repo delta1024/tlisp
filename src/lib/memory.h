@@ -6,15 +6,15 @@ typedef struct {
 	void *ud;
 	tlisp_allocator_functions f;
 	size_t total_alloced;
-} allocator_t;
+} allocator;
 
 typedef struct {
 	size_t allocated;
 	size_t freed;
-} mem_tracker_t;
+} mem_tracker;
 extern tlisp_allocator_functions const default_callbacks;
 
-void *tmalloc(allocator_t *allocator, size_t size);
-void *trealloc(allocator_t *allocator, void *ptr, size_t nsize, size_t osize);
-void tfree(allocator_t *allocator, void *ptr, size_t osize);
+void *tmalloc(allocator *allocator, size_t size);
+void *trealloc(allocator *allocator, void *ptr, size_t nsize, size_t osize);
+void tfree(allocator *allocator, void *ptr, size_t osize);
 #endif // !_TLISP_MEMORY_H__

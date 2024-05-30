@@ -12,7 +12,7 @@ target_include_directories(${PROJECT_NAME}
 	$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
 )
-add_subdirectory(include)
+file(GLOB_RECURSE PROJECT_INSTALL_HEADERS include/*.h)
 target_sources(${PROJECT_NAME}
    PUBLIC FILE_SET HEADERS
    BASE_DIRS include

@@ -2,24 +2,24 @@
 #include "tlisp/common.h"
 #include "tlisp/sys/alloc.h"
 #include <stdlib.h>
-void *tmalloc(allocator_t *allocator, size_t size) {
+void *tmalloc(allocator *allocator, size_t size) {
 	void *ptr = allocator->f.malloc(allocator->ud, size);
 	allocator->total_alloced = allocator->f.get_total(allocator->ud);
 	return ptr;
 }
 
-void *trealloc(allocator_t *allocator, void *ptr, size_t nsize, size_t osize) {
+void *trealloc(allocator *allocator, void *ptr, size_t nsize, size_t osize) {
 	ptr =  allocator->f.realloc(allocator->ud, ptr, nsize, osize);
 	allocator->total_alloced = allocator->f.get_total(allocator->ud);
 	return ptr;
 }
 
-void tfree(allocator_t *allocator, void *ptr, size_t osize) {
+void tfree(allocator *allocator, void *ptr, size_t osize) {
 	allocator->f.free(allocator->ud, ptr, osize);
 }
 
 void *itmalloc(void *ud, size_t size) {
-	mem_tracker_t *tracker = (mem_tracker_t*)ud;
+	mem_tracker *tracker = (mem_tracker*)ud;
 	void *ptr = malloc(size);
 	if (ptr == NULL) {
 		return NULL;
@@ -28,7 +28,7 @@ void *itmalloc(void *ud, size_t size) {
 	return ptr;
 }
 void *itrealloc(void *ud, void *ptr, size_t osize, size_t nsize) {
-	mem_tracker_t *tracker = (mem_tracker_t*)ud;
+	mem_tracker *tracker = (mem_tracker*)ud;
 	ptr = realloc(ptr, nsize);
 	if (ptr == NULL) {
 		return NULL;
@@ -41,13 +41,13 @@ void *itrealloc(void *ud, void *ptr, size_t osize, size_t nsize) {
 	return ptr;
 }
 void itfree(void *ud, void *ptr, size_t osize) {
-	mem_tracker_t *tracker = (mem_tracker_t*)ud;
+	mem_tracker *tracker = (mem_tracker*)ud;
 	free(ptr);
 	tracker->freed += osize;
 }
 
 size_t itget_total(void *ud) {
-	mem_tracker_t *tracker = (mem_tracker_t*)ud;
+	mem_tracker *tracker = (mem_tracker*)ud;
 	return tracker->allocated;
 }
 tlisp_allocator_functions const default_callbacks = {
