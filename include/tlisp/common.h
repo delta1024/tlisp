@@ -4,7 +4,7 @@
 /**
  * @file tlisp/common.h
  * @brief Tlisp common platform definitions
- * @defgroup tlisp_common Tlisp common platform definitions
+ * @defgroup tlisp_common 
  * @ingroup Tlisp
  * @{
  */

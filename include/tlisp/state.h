@@ -4,8 +4,8 @@
 /**
  * @file tlisp/state.h
  * @brief Tlisp state  routines
- * @defgroup tlisp_state Tlisp state  routines
  * @ingroup Tlisp
+ * @defgroup tlisp_state 
  * @{
  */
 
