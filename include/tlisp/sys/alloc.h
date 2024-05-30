@@ -14,18 +14,20 @@ typedef size_t (*tget_total_t)(void *ud);
 
 /** Interface for defining a custom allocator */
 typedef struct {
-	tmalloc_t malloc; /**< */
-	trealloc_t realloc;/**< */
-	tfree_t free;/**< */
-	tget_total_t get_total;/**< */
-} tlisp_allocator_functions ;
+    tmalloc_t malloc;       /**< */
+    trealloc_t realloc;     /**< */
+    tfree_t free;           /**< */
+    tget_total_t get_total; /**< */
+} tlisp_allocator_functions;
 
-/** Set the allocator for a state 
+/** Set the allocator for a state
  * @param state State to set the allocator on
- * @param ud    Memory tracker to pass to each callback. be sure to call tlisp_alloc_update_total() after each successful allocation.
+ * @param ud    Memory tracker to pass to each callback. be sure to call
+ * tlisp_alloc_update_total() after each successful allocation.
  * @param callbacks Callbacks to call on internal allocation.
  *
-*/
-void tlisp_sys_set_state_allocator(tlisp_state *state, void *ud, tlisp_allocator_functions callbacks);
+ */
+void tlisp_sys_set_state_allocator(tlisp_state *state, void *ud,
+                                   tlisp_allocator_functions callbacks);
 
 #endif // !INCLUDE_sys_tlisp_alloc_h__

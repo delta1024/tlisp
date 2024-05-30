@@ -3,7 +3,7 @@
 #include "memory.h"
 #include <stddef.h>
 struct tlisp_state {
-	mem_tracker mem_usage;
-	allocator allocator;
+    mem_tracker mem_usage;
+    allocator allocator;
 };
 #endif // !_TLISP_STATE_H__

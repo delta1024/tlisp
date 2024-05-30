@@ -3,14 +3,14 @@
 #include "tlisp/common.h"
 #include "tlisp/sys/alloc.h"
 typedef struct {
-	void *ud;
-	tlisp_allocator_functions f;
-	size_t total_alloced;
+    void *ud;
+    tlisp_allocator_functions f;
+    size_t total_alloced;
 } allocator;
 
 typedef struct {
-	size_t allocated;
-	size_t freed;
+    size_t allocated;
+    size_t freed;
 } mem_tracker;
 extern tlisp_allocator_functions const default_callbacks;
 
