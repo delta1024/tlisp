@@ -3,9 +3,9 @@
 #include "tlisp/common.h"
 #include "tlisp/sys/alloc.h"
 typedef struct {
+    size_t total_alloced;
     void *ud;
     tlisp_allocator_functions f;
-    size_t total_alloced;
 } allocator;
 
 typedef struct {

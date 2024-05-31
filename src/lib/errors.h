@@ -7,10 +7,10 @@ typedef enum {
     TLISP_RESULT_ERR,
 } result_t;
 typedef struct error_array {
+    tlisp_error *errors;
     int count;
     int capacity;
     int read_pos;
-    tlisp_error *errors;
 } error_array;
 FILE *error_openstream(error_array *array);
 void error_adderror(FILE *stream, tlisp_error_t errn, const char *format, ...);

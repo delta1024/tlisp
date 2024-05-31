@@ -6,7 +6,7 @@
 void setUp(void) {}
 void tearDown(void){}
 void test_errstream(void) {
-error_array array = {0,0,0,NULL};
+error_array array = {NULL};
     FILE *handle = error_openstream(&array);
     error_adderror(handle, TLISP_ERR_UNTERMITATED_STRING, "unterminated string");
 

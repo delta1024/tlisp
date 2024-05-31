@@ -1,6 +1,10 @@
-add_executable(errStream errStream.c)
-target_link_libraries(errStream PRIVATE unity tlisp)
-target_include_directories(errStream PRIVATE
-	$<TARGET_PROPERTY:tlisp,INCLUDE_DIRECTORIES>
-)
-add_test(errStream errStream)
+function(create_test name)
+	add_executable(${name} ${name}.c)
+	target_link_libraries(${name} PRIVATE tlisp unity)
+	target_include_directories(${name} PRIVATE
+		$<TARGET_PROPERTY:tlisp,INCLUDE_DIRECTORIES>
+	)
+	add_test(${name} ${name})
+endfunction()
+create_test(errStream)
+create_test(errAdd)

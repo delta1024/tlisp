@@ -31,5 +31,11 @@ void tlisp_error_free(tlisp_error *error);
  * the C stdlib.
  */
 int tlisp_error_flush(tlisp_state *state, FILE *stream);
+/** Report an error
+ * @param state The state to add the error to.
+ * @param errn Error code to attach to the error.
+ * @param message A printf style string containing information about the message.
+*/
+void tlisp_error_report(tlisp_state *state,int errn, const char *message, ...);
 /** @} */
 #endif // !INCLUDE_tlisp_errors_h
