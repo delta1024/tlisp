@@ -18,6 +18,7 @@ FILE *error_openstream(error_array *array) {
     FILE *file = fopencookie(array, "w", callbacks);
     if (file == NULL)
         return NULL;
+    setvbuf(file, NULL, _IOLBF, BUFSIZ);
     return file;
 }
 
