@@ -1,6 +1,7 @@
 target_sources(${PROJECT_NAME}
 	PRIVATE
-	memory.c memory.h
+	memory.c memory.h 
+	errors.c errors.h
 )
 target_include_directories(${PROJECT_NAME}
 	PRIVATE

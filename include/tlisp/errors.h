@@ -2,6 +2,7 @@
 #define INCLUDE_tlisp_errors_h
 #include "types.h"
 #include <stdio.h>
+#include <stdbool.h>
 /**
  * @file tlisp/errors.h
  * @brief Tlisp error handling routines
@@ -11,17 +12,17 @@
  */
 
 /** Get the next error in the error que.
- * @param state The state to query.
- * @returns The next error or NULL if que is empty. Error must be freed with
+ * @param[in] state The state to query.
+ * @param[out] err ptr to store error info.
+ * @returns false if que is empty. Error must be freed with
  * tlisp_error_free() when you are done with it.
  */
-tlisp_error *tlisp_error_next(tlisp_state *state);
+bool tlisp_error_next(tlisp_state *state, tlisp_error *err);
 
 /** Dispose of an error
- * @param state The state that generated the error.
  * @param error The error to despose of.
  */
-void tlisp_error_free(tlisp_state *state, tlisp_error *error);
+void tlisp_error_free(tlisp_error *error);
 
 /** Dump all error messages left in the que to a stream.
  * @param state The state to flush.
