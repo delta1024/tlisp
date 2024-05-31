@@ -3,9 +3,9 @@
 /** @defgroup Tlisp */
 // IWYU pragma: begin_exports
 #include "tlisp/common.h"
+#include "tlisp/errors.h"
 #include "tlisp/state.h"
 #include "tlisp/types.h"
-#include "tlisp/errors.h"
 // IWYU pragma: end_exports
 
 #endif // !INCLUDE_tlisp_tlisp_h__
