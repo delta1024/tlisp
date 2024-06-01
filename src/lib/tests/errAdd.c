@@ -12,26 +12,26 @@ int errAdd() {
     tlisp_error_report(state, TLISP_ERR_UNTERMITATED_STRING, message);
 
     if(!tlisp_error_next(state, &error)) {
-        test_fail(__func__, "Could not get error from state");
+        test_fail( "Could not get error from state");
         goto defer;
     }
 
     if (error.code != TLISP_ERR_UNTERMITATED_STRING) {
-        test_fail(__func__, "Wrong error code; expected %d, got %d", TLISP_ERR_UNTERMITATED_STRING, error.code);
+        test_fail( "Wrong error code; expected %d, got %d", TLISP_ERR_UNTERMITATED_STRING, error.code);
         goto defer_err;
     }
 
     int err_len = strlen(message);
     if (error.mlen != err_len) {
-        test_fail(__func__, "Wrong error len; expected %d, got %d", err_len, error.mlen);
+        test_fail( "Wrong error len; expected %d, got %d", err_len, error.mlen);
         goto defer_err;
     }
 
     if (memcmp(message, error.message, error.mlen) != 0) {
-        test_fail(__func__,"Wrong error message; expected %s, get %.*s", message, error.mlen, error.message );
+        test_fail("Wrong error message; expected %s, get %.*s", message, error.mlen, error.message );
         goto defer_err;
     }
-    test_pass(__func__);
+    test_pass();
 
 defer_err:
     tlisp_error_free(&error);
