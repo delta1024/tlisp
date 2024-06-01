@@ -5,12 +5,8 @@ project(tlisp
    LANGUAGES C
    DESCRIPTION "A tiny lisp for embeding"
 )
-option(BUILD_TESTS "build language tests" ON)
 
-if (BUILD_TESTS)
-   enable_testing()
-endif()
-
+include(CTest)
 add_library(${PROJECT_NAME} SHARED)
 target_include_directories(${PROJECT_NAME}
         PUBLIC
@@ -24,9 +20,6 @@ target_sources(${PROJECT_NAME}
    FILES 
    ${PROJECT_INSTALL_HEADERS}
 )
-if (BUILD_TESTS)
-   add_subdirectory(deps/unity)
-endif()
 add_subdirectory(src/lib)
 
 include(GNUInstallDirs)

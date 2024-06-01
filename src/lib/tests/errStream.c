@@ -1,23 +1,40 @@
+#include "tlisp/errors.h"
 #include "tlisp/types.h"
-#include "unity.h"
 #include "errors.h"
-#include "unity_internals.h"
+#include "test_common.h"
 #include <stdio.h>
-void setUp(void) {}
-void tearDown(void){}
-void test_errstream(void) {
-error_array array = {NULL};
+#include <stdlib.h>
+#include <string.h>
+static const char *message = "unterminated string";
+int errStream(void) {
+    error_array array = {NULL};
     FILE *handle = error_openstream(&array);
-    error_adderror(handle, TLISP_ERR_UNTERMITATED_STRING, "unterminated string");
+    error_adderror(handle, TLISP_ERR_UNTERMITATED_STRING,message);
+    if (array.count != 1) {
+        test_fail(__func__, "Wrong array count");
+        goto defer;
+    }
+    tlisp_error *error = &array.errors[0];
+    if (error->code != TLISP_ERR_UNTERMITATED_STRING) {
+        test_fail(__func__, "Wrong error code; expected %d, got %d", TLISP_ERR_UNTERMITATED_STRING, error->code);
+        goto defer_err;
+    }
 
-    TEST_ASSERT_MESSAGE(array.count == 1, "Error array wrong size.");
-    tlisp_error *err = &array.errors[0];
-    TEST_ASSERT(err->code == TLISP_ERR_UNTERMITATED_STRING);
-    TEST_ASSERT_EQUAL_STRING_LEN_MESSAGE("unterminated string", err->message, err->mlen, "err strings not equal");
-        
-}
-int main() {
-    UNITY_BEGIN();
-    RUN_TEST(test_errstream);
-    UNITY_END();
+    int err_len = strlen(message);
+    if (error->mlen != err_len) {
+        test_fail(__func__, "Wrong error len; expected %d, got %d", err_len, error->mlen);
+        goto defer_err;
+    }
+
+    if (memcmp(message, error->message, error->mlen) != 0) {
+        test_fail(__func__,"Wrong error message; expected %s, get %.*s", message, error->mlen, error->message );
+        goto defer_err;
+    }
+    test_pass(__func__);
+defer_err:
+    tlisp_error_free(error);
+    free(array.errors);
+defer:
+    fclose(handle);
+    return 0;
 }

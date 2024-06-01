@@ -32,13 +32,13 @@ void error_vadderror(FILE *stream, tlisp_error_t errn, const char *format,
                      va_list args) {
     va_list arg_count;
     va_copy(arg_count, args);
-    int size = vsnprintf(NULL, 0, format, arg_count);
+    int size = vsnprintf(NULL, 0, format, arg_count) + 1;
     va_end(arg_count);
 
-    char *buffer = alloca(size + 1);
-    size         = vsnprintf(buffer, size + 1, format, args);
+    char *buffer = alloca(size);
+    size         = vsnprintf(buffer, size, format, args);
     buffer[size] = 0;
-    fprintf(stream, "%d %s\n", errn, buffer);
+    fprintf(stream, "%d%s\n", errn, buffer);
 }
 bool tlisp_error_next(tlisp_state *state, tlisp_error *err) {
     if (state->errors.read_pos == state->errors.count)
@@ -79,7 +79,7 @@ void tlisp_error_report(tlisp_state *state, int errn, const char *message, ...) 
 
 ssize_t write(void *cookie, const char *buf, size_t size) {
     tlisp_error error;
-    if (sscanf(buf, "%d %m[^EOF]", &error.code, &error.message) == 0) return 0;
+    if (sscanf(buf, "%d%m[^\n]", &error.code, &error.message) == 0) return 0; // 0 if nothing written
     error.mlen = strlen(error.message);
     error_array *array = (error_array*)cookie;
     if (array->count + 1 > array->capacity) {
