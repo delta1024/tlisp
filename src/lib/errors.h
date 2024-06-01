@@ -13,6 +13,7 @@ typedef struct error_array {
     int read_pos;
 } error_array;
 FILE *error_openstream(error_array *array);
+void error_freearray(error_array *array);
 void error_adderror(FILE *stream, tlisp_error_t errn, const char *format, ...);
 void error_vadderror(FILE *stream, tlisp_error_t errn, const char *format, va_list args);
 #endif // !_TLISP_ERRORS_H__

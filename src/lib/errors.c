@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 static ssize_t write(void *cookie, const char *buf, size_t size);
 static cookie_io_functions_t callbacks = {
     .write = write,
@@ -14,6 +15,7 @@ static cookie_io_functions_t callbacks = {
     .seek = NULL,
     .close = NULL,
 };
+
 FILE *error_openstream(error_array *array) {
     FILE *file = fopencookie(array, "w", callbacks);
     if (file == NULL)
@@ -40,6 +42,20 @@ void error_vadderror(FILE *stream, tlisp_error_t errn, const char *format,
     buffer[size] = 0;
     fprintf(stream, "%d%s\n", errn, buffer);
 }
+void error_freearray(error_array *array) {
+    for (;array->read_pos < array->count; array->read_pos++) {
+        tlisp_error_free(&array->errors[array->read_pos]);
+    }
+    free(array->errors);
+    array->errors = NULL;
+    array->read_pos = array->count = array->capacity = 0;
+}
+
+/* ------------------------
+ * |       Interface      |
+ * ------------------------
+*/
+
 bool tlisp_error_next(tlisp_state *state, tlisp_error *err) {
     if (state->errors.read_pos == state->errors.count)
         return false;
@@ -72,6 +88,7 @@ void tlisp_error_report(tlisp_state *state, int errn, const char *message, ...) 
     va_end(args);
     fclose(errs);
 }
+
 /* ------------------------
  * |      Callbacks       |
  * ------------------------
