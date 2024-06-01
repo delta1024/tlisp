@@ -1,7 +1,7 @@
 #ifndef _TLISP_VALUE_H__
 #define _TLISP_VALUE_H__
 #include "tlisp/types.h"
-#include "memory.h"
+#include "core/memory.h"
 typedef struct {
     tlisp_value *entries;
     int count;

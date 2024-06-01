@@ -1,9 +1,9 @@
 #ifndef _TLISP_STATE_H__
 #define _TLISP_STATE_H__
-#include "memory.h"
-#include "errors.h"
-#include "vm.h"
-#include "chunk.h"
+#include "core/memory.h"
+#include "core/errors.h"
+#include "runtime/vm.h"
+#include "arrays/chunk.h"
 #include <stddef.h>
 struct tlisp_state {
     error_array errors;

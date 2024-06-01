@@ -1,8 +1,9 @@
 #include "tlisp/state.h"
-#include "chunk.h"
-#include "errors.h"
-#include "memory.h"
+#include "arrays/chunk.h"
+#include "core/errors.h"
+#include "core/memory.h"
 #include "state.h" // IWYU pragma: keep
+#include "runtime/vm.h"
 #include "tlisp/errors.h"
 #include <stdio.h>
 #include <stdlib.h>

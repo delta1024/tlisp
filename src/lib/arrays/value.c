@@ -1,5 +1,5 @@
 #include "value.h"
-#include "memory.h"
+#include "core/memory.h"
 #include "tlisp/types.h"
 #include <stddef.h>
 

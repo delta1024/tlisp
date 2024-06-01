@@ -1,8 +1,8 @@
 #ifndef _TLISP_CHUNK_H__
 #define _TLISP_CHUNK_H__
-#include "memory.h"
 #include "tlisp/types.h"
-#include "value.h"
+#include "tlisp/common.h" // IWYU pragma: keep
+#include "arrays/value.h"
 
 typedef struct {
     uint8_t *code;

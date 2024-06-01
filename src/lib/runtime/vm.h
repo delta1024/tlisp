@@ -1,6 +1,6 @@
 #ifndef _TLISP_VM_H__
 #define _TLISP_VM_H__
-#include "chunk.h"
+#include "arrays/chunk.h"
 #include <stdio.h>
 
 typedef struct {

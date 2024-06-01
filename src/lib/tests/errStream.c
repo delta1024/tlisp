@@ -1,6 +1,6 @@
 #include "tlisp/errors.h"
 #include "tlisp/types.h"
-#include "errors.h"
+#include "core/errors.h"
 #include "test_common.h"
 #include <stdio.h>
 #include <stdlib.h>
