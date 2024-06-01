@@ -51,17 +51,20 @@ void error_freearray(error_array *array) {
     array->read_pos = array->count = array->capacity = 0;
 }
 
+bool error_next(error_array *array, tlisp_error *err) {
+    if (array->read_pos == array->count)
+        return false;
+
+    *err = array->errors[array->read_pos++];
+    return true;
+}
 /* ------------------------
  * |       Interface      |
  * ------------------------
 */
 
 bool tlisp_error_next(tlisp_state *state, tlisp_error *err) {
-    if (state->errors.read_pos == state->errors.count)
-        return false;
-
-    *err = state->errors.errors[state->errors.read_pos++];
-    return true;
+    return error_next(&state->errors, err);
 }
 
 void tlisp_error_free(tlisp_error *error) {
