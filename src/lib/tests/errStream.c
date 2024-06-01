@@ -6,7 +6,11 @@
 #include <stdlib.h>
 #include <string.h>
 static const char *message = "unterminated string";
+#ifdef CMAKE_BUILD_TESTS
+int errStream(void) {
+#else
 int main(void) {
+#endif /* ifdef CMAKE_BUILD_TESTS */
     error_array array = {NULL};
     FILE *handle = error_openstream(&array);
     error_adderror(handle, TLISP_ERR_UNTERMITATED_STRING,message);

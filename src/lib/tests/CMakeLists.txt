@@ -10,6 +10,7 @@ create_test_sourcelist(TestSources
 
 add_executable(LibTests ${TestSources} test_common.c)
 target_link_libraries(LibTests PRIVATE tlisp)
+target_compile_definitions(LibTests PUBLIC CMAKE_BUILD_TESTS)
 target_include_directories(LibTests PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}
 	$<TARGET_PROPERTY:tlisp,INCLUDE_DIRECTORIES>
@@ -22,8 +23,8 @@ foreach(tPath ${TEST_LIST})
 	set_tests_properties(
 		${test}
 		PROPERTIES
-		PASS_REGULAR_EXPRESSION "PASS"
-		FAIL_REGULAR_EXPRESSION "FAIL"
+		PASS_REGULAR_EXPRESSION "^ok"
+		FAIL_REGULAR_EXPRESSION "^not ok"
 	)
 endforeach()
 

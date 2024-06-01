@@ -2,7 +2,12 @@ project('tlisp', 'c',
   version: '0.0.1',
   license: 'MIT')
 inc = include_directories('include')
-src_inc = include_directories('src/lib')
+
+if get_option('build_tests').enabled()
+  src_inc = include_directories('src/lib')
+else
+  src_inc = disabler()
+endif
 
 subdir('include')
 subdir('src/lib')
