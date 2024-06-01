@@ -8,7 +8,7 @@ void *tmalloc(allocator *allocator, size_t size) {
     return ptr;
 }
 
-void *trealloc(allocator *allocator, void *ptr, size_t nsize, size_t osize) {
+void *trealloc(allocator *allocator, void *ptr, size_t osize, size_t nsize) {
     ptr = allocator->f.realloc(allocator->ud, ptr, nsize, osize);
     allocator->total_alloced = allocator->f.get_total(allocator->ud);
     return ptr;

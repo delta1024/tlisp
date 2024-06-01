@@ -18,6 +18,7 @@ typedef enum {
     TLISP_ERR_NOMEM = -1, /**< Program has run out of memory. */
     TLISP_ERR_UNTERMITATED_STRING =
         -2,               /**< Lexer has encountered an unterminated string */
+    TLISP_ERR_STACK_OVERFLOW = -3, /**< Runtime stack overflow */
 } tlisp_error_t;
 
 /** A tlisp error value */

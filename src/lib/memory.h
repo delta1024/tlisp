@@ -15,6 +15,6 @@ typedef struct {
 extern tlisp_allocator_functions const default_callbacks;
 
 void *tmalloc(allocator *allocator, size_t size);
-void *trealloc(allocator *allocator, void *ptr, size_t nsize, size_t osize);
+void *trealloc(allocator *allocator, void *ptr, size_t osize, size_t nsize);
 void tfree(allocator *allocator, void *ptr, size_t osize);
 #endif // !_TLISP_MEMORY_H__
