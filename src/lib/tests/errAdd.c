@@ -7,7 +7,7 @@
 static tlisp_state *state;
     static const char *message = "unterminated string";
     static tlisp_error error;
-int errAdd() {
+int main() {
     state = tlisp_state_open();
     tlisp_error_report(state, TLISP_ERR_UNTERMITATED_STRING, message);
 

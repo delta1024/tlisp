@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 static const char *message = "unterminated string";
-int errStream(void) {
+int main(void) {
     error_array array = {NULL};
     FILE *handle = error_openstream(&array);
     error_adderror(handle, TLISP_ERR_UNTERMITATED_STRING,message);
