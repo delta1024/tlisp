@@ -1,6 +1,6 @@
 #include "state.h" // IWYU pragma: keep
-#include <stdlib.h>
 #include "stdarg.h"
+#include <stdlib.h>
 bool tlisp_error_next(tlisp_state *state, tlisp_error *err) {
     return error_next(&state->errors, err);
 }
@@ -21,11 +21,12 @@ int tlisp_error_flush(tlisp_state *state, FILE *stream) {
     return 0;
 }
 
-void tlisp_error_report(tlisp_state *state, int errn, const char *message, ...) {
+void tlisp_error_report(tlisp_state *state, int errn, const char *message,
+                        ...) {
     FILE *errs = error_openstream(&state->errors);
     va_list args;
     va_start(args, message);
-    error_vadderror(errs,errn, message, args);
+    error_vadderror(errs, errn, message, args);
     va_end(args);
     fclose(errs);
 }

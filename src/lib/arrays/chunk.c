@@ -15,16 +15,17 @@ void chunk_free(chunk *chunk, allocator *allocator) {
     value_array_free(&chunk->constants, allocator);
     chunk_init(chunk);
 }
-void chunk_writebyte(chunk *chunk, uint8_t byte, uint8_t line, allocator *allocator) {
+void chunk_writebyte(chunk *chunk, uint8_t byte, uint8_t line,
+                     allocator *allocator) {
     if (chunk->count + 1 > chunk->capacity) {
-        int ocap = chunk->capacity;
+        int ocap        = chunk->capacity;
         chunk->capacity = ocap < 8 ? 8 : ocap * 2;
-        chunk->code = trealloc(allocator, chunk->code, sizeof(uint8_t) * ocap,
-                               sizeof(uint8_t) * chunk->capacity);
-        chunk->lines = trealloc(allocator, chunk->lines, sizeof(uint8_t) * ocap, 
+        chunk->code  = trealloc(allocator, chunk->code, sizeof(uint8_t) * ocap,
+                                sizeof(uint8_t) * chunk->capacity);
+        chunk->lines = trealloc(allocator, chunk->lines, sizeof(uint8_t) * ocap,
                                 sizeof(uint8_t) * chunk->capacity);
     }
-    chunk->code[chunk->count] = byte;
+    chunk->code[chunk->count]    = byte;
     chunk->lines[chunk->count++] = line;
 }
 

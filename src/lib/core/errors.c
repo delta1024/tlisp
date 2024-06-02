@@ -10,8 +10,8 @@
 static ssize_t write(void *cookie, const char *buf, size_t size);
 static cookie_io_functions_t callbacks = {
     .write = write,
-    .read = NULL,
-    .seek = NULL,
+    .read  = NULL,
+    .seek  = NULL,
     .close = NULL,
 };
 
@@ -42,11 +42,11 @@ void error_vadderror(FILE *stream, tlisp_error_t errn, const char *format,
     fprintf(stream, "%d%s\n", errn, buffer);
 }
 void error_freearray(error_array *array) {
-    for (;array->read_pos < array->count; array->read_pos++) {
+    for (; array->read_pos < array->count; array->read_pos++) {
         tlisp_error_free(&array->errors[array->read_pos]);
     }
     free(array->errors);
-    array->errors = NULL;
+    array->errors   = NULL;
     array->read_pos = array->count = array->capacity = 0;
 }
 
@@ -60,22 +60,23 @@ bool error_next(error_array *array, tlisp_error *err) {
 /* ------------------------
  * |       Interface      |
  * ------------------------
-*/
-
+ */
 
 /* ------------------------
  * |      Callbacks       |
  * ------------------------
-*/
+ */
 
 ssize_t write(void *cookie, const char *buf, size_t size) {
     tlisp_error error;
-    if (sscanf(buf, "%d%m[^\n]", &error.code, &error.message) == 0) return 0; // 0 if nothing written
-    error.mlen = strlen(error.message);
-    error_array *array = (error_array*)cookie;
+    if (sscanf(buf, "%d%m[^\n]", &error.code, &error.message) == 0)
+        return 0; // 0 if nothing written
+    error.mlen         = strlen(error.message);
+    error_array *array = (error_array *)cookie;
     if (array->count + 1 > array->capacity) {
         array->capacity = array->capacity < 8 ? 8 : array->capacity * 2;
-        array->errors = reallocarray(array->errors, array->capacity, sizeof(tlisp_error));
+        array->errors =
+            reallocarray(array->errors, array->capacity, sizeof(tlisp_error));
     }
     array->errors[array->count++] = error;
     return size;

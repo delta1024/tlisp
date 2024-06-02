@@ -8,7 +8,6 @@ conf_data = configuration_data()
 
 config_inc = include_directories('.')
 inc = include_directories('include')
-
 feat_build_tests = get_option('build_tests')\
     .enable_auto_if(get_option('buildtype') == 'debug')
 

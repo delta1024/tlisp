@@ -1,7 +1,7 @@
-#include "tlisp/errors.h"
-#include "tlisp/types.h"
 #include "core/errors.h"
 #include "test_common.h"
+#include "tlisp/errors.h"
+#include "tlisp/types.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,15 +12,16 @@ int errStream(void) {
 int main(void) {
 #endif /* ifdef CMAKE_BUILD_TESTS */
     error_array array = {NULL};
-    FILE *handle = error_openstream(&array);
-    error_adderror(handle, TLISP_ERR_UNTERMITATED_STRING,message);
+    FILE *handle      = error_openstream(&array);
+    error_adderror(handle, TLISP_ERR_UNTERMITATED_STRING, message);
     if (array.count != 1) {
         test_fail("Wrong array count");
         goto defer;
     }
     tlisp_error *error = &array.errors[0];
     if (error->code != TLISP_ERR_UNTERMITATED_STRING) {
-        test_fail("Wrong error code; expected %d, got %d", TLISP_ERR_UNTERMITATED_STRING, error->code);
+        test_fail("Wrong error code; expected %d, got %d",
+                  TLISP_ERR_UNTERMITATED_STRING, error->code);
         goto defer_err;
     }
 
@@ -31,7 +32,8 @@ int main(void) {
     }
 
     if (memcmp(message, error->message, error->mlen) != 0) {
-        test_fail("Wrong error message; expected %s, get %.*s", message, error->mlen, error->message );
+        test_fail("Wrong error message; expected %s, get %.*s", message,
+                  error->mlen, error->message);
         goto defer_err;
     }
     test_pass();
