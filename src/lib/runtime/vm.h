@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 typedef struct {
-    chunk *chunk;
+    chunk_t *chunk;
     uint8_t *ip;
     FILE *errout;
 } vm;

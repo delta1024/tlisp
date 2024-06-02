@@ -9,7 +9,7 @@ struct tlisp_state {
     error_array errors;
     mem_tracker mem_usage;
     allocator allocator;
-    chunk chunk;
+    chunk_t chunk;
     vm vm;
 };
 #endif // !_TLISP_STATE_H__
