@@ -11,7 +11,7 @@ struct tlisp_state {
     mem_tracker mem_usage;
     allocator allocator;
     chunk_t chunk;
-    value_stack stack;
+    value_stack *stack;
     vm vm;
 };
 #endif // !_TLISP_STATE_H__

@@ -8,7 +8,7 @@
 typedef struct {
     chunk_t *chunk;
     uint8_t *ip;
-    value_stack *stack;
+    value_stack stack;
     FILE *errout;
 } vm;
 

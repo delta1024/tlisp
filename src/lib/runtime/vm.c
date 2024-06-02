@@ -36,7 +36,7 @@ tlisp_result_t runtime_error(vm *vm, tlisp_error_t errn, const char *message,
 }
 tlisp_result_t vm_push(vm *vm, tlisp_value value) {
     tlisp_error_t res;
-    if ((res = stack_push(vm->stack, value)) != TLISP_ERR_OK) {
+    if ((res = stack_push(&vm->stack, value)) != TLISP_ERR_OK) {
         return runtime_error(vm, res, "too many values in one chunk.");
     }
     return TLISP_RESULT_OK;
@@ -49,15 +49,15 @@ tlisp_result_t vm_interpret(vm *vm) {
     do {                                                                       \
         tlisp_value b;                                                         \
         tlisp_value a;                                                         \
-        stack_pop(vm->stack, &b);                                              \
-        stack_pop(vm->stack, &a);                                              \
+        stack_pop(&vm->stack, &b);                                             \
+        stack_pop(&vm->stack, &a);                                             \
         if (!vm_push(vm, (a op b)))                                            \
             return TLISP_RESULT_ERR;                                           \
     } while (false);
     for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
         printf("\t  ");
-        for (tlisp_value *slot = vm->stack->buffer; slot < vm->stack->stack_top;
+        for (tlisp_value *slot = vm->stack.buffer; slot < vm->stack.stack_top;
              slot++) {
             printf("[ ");
             value_print(*slot);
@@ -83,7 +83,7 @@ tlisp_result_t vm_interpret(vm *vm) {
         }
         case OP_RETURN: {
             tlisp_value value;
-            if (stack_pop(vm->stack, &value)) {
+            if (stack_pop(&vm->stack, &value)) {
                 value_print(value);
                 printf("\n");
             }
