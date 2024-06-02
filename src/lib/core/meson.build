@@ -1,5 +1,6 @@
 tlispcore_sources = ['errors.h', 'errors.c',
-                     'memory.h', 'memory.c']
+                     'memory.h', 'memory.c',
+                     'value.h', 'value.c']
 tlispcore = static_library('tlispcore', 
                             tlispcore_sources,
                             include_directories: inc,

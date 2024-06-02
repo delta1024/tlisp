@@ -1,6 +1,7 @@
 #include "vm.h"
 #include "config.h"
 #include "core/errors.h"
+#include "core/value.h"
 #include "opcode.h"
 #include "tlisp/types.h"
 #include <stdarg.h>
@@ -34,12 +35,19 @@ tlisp_result_t runtime_error(vm *vm, tlisp_error_t errn, const char *message,
 }
 tlisp_result_t vm_interpret(vm *vm) {
 #define read_byte() (*vm->ip++)
+#define read_constant() (vm->chunk->constants.entries[read_byte()])
     for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
         debug_dissasemble_instruction(vm->chunk, vm->ip - vm->chunk->code);
 #endif /* ifdef DEBUG_TRACE_EXECUTION */
         int byte = read_byte();
         switch (byte) {
+        case OP_CONSTANT: {
+                tlisp_value value = read_constant();
+                value_print(value);
+                printf("\n");
+                break;
+        }
         case OP_RETURN:
             return TLISP_RESULT_OK;
         default:
@@ -48,4 +56,5 @@ tlisp_result_t vm_interpret(vm *vm) {
         }
     }
 #undef read_byte
+#undef read_constant
 }

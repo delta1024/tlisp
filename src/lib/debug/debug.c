@@ -1,4 +1,6 @@
 #include "debug.h"
+#include "arrays/chunk.h"
+#include "core/value.h"
 #include "runtime/opcode.h"
 #include "runtime/opcode_strs.h"
 #include <stdio.h>
@@ -12,6 +14,13 @@ int simple_instruction(const char *name, int offset) {
     printf("%s\n", name);
     return offset + 1;
 }
+int constant_instruction(const char *name, const chunk *chunk, int offset ) {
+    int index = chunk->code[offset + 1];
+    printf("%-16s %d '", name, index);
+    value_print(chunk->constants.entries[index]);
+    printf("'\n");
+    return offset + 2;
+}
 int debug_dissasemble_instruction(const chunk *chunk, int offset) {
     printf("%04d ", offset);
     if (offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1]) {
@@ -21,6 +30,8 @@ int debug_dissasemble_instruction(const chunk *chunk, int offset) {
     }
     int byte = chunk->code[offset];
     switch (byte) {
+    case OP_CONSTANT: 
+        return constant_instruction(op_strs[byte], chunk, offset);
     case OP_RETURN:
         return simple_instruction(op_strs[byte], offset);
     default:
