@@ -51,13 +51,14 @@ tlisp_result_t vm_interpret(vm *vm) {
         tlisp_value a;                                                         \
         stack_pop(vm->stack, &b);                                              \
         stack_pop(vm->stack, &a);                                              \
-        if (vm_push(vm, (a op b)) != TLISP_RESULT_OK)                          \
+        if (!vm_push(vm, (a op b)))                                            \
             return TLISP_RESULT_ERR;                                           \
     } while (false);
     for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
-        printf("\t");
-        for (tlisp_value *slot = vm->stack->buffer; slot < vm->stack->stack_top; slot++) {
+        printf("\t  ");
+        for (tlisp_value *slot = vm->stack->buffer; slot < vm->stack->stack_top;
+             slot++) {
             printf("[ ");
             value_print(*slot);
             printf(" ]");
@@ -68,34 +69,29 @@ tlisp_result_t vm_interpret(vm *vm) {
 
         int byte = read_byte();
         switch (byte) {
-        case OP_ADD:
-            binary_op(+);
-            break;
-        case OP_SUBTRACT:
-            binary_op(-);
-            break;
-        case OP_MULTIPLY:
-            binary_op(*);
-            break;
-        case OP_DIVIDE:
-            binary_op(/);
-            break;
+            // clang-format off
+        case OP_ADD: binary_op(+); break;
+        case OP_SUBTRACT: binary_op(-); break;
+        case OP_MULTIPLY: binary_op(*); break;
+        case OP_DIVIDE: binary_op(/); break;
+            // clang-format on
         case OP_CONSTANT: {
             tlisp_value value = read_constant();
-            if (vm_push(vm, value) != TLISP_RESULT_OK)
+            if (!vm_push(vm, value))
                 return TLISP_RESULT_ERR;
             break;
         }
         case OP_RETURN: {
-                tlisp_value value;
-                if (stack_pop(vm->stack, &value)) {
-                    value_print(value);
-                    printf("\n");
-                }
-            return TLISP_RESULT_OK;
+            tlisp_value value;
+            if (stack_pop(vm->stack, &value)) {
+                value_print(value);
+                printf("\n");
             }
+            return TLISP_RESULT_OK;
+        }
         default:
-            return runtime_error(vm, TLISP_ERR_WRNG_OPCODE, "unknown opcode %d", byte);
+            return runtime_error(vm, TLISP_ERR_WRNG_OPCODE, "unknown opcode %d",
+                                 byte);
         }
     }
 #undef read_byte

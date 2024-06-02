@@ -43,9 +43,16 @@ void tlisp_state_close(tlisp_state *state) {
 }
 tlisp_result_t tlisp_state_loadbuffer(tlisp_state *state, const char *buffer,
                                       int blen) {
-    int pos = chunk_writeconstant(&state->chunk, 33, &state->allocator);
-    chunk_writebyte(&state->chunk, OP_CONSTANT, 0, &state->allocator);
-    chunk_writebyte(&state->chunk, pos, 0, &state->allocator);
+#define add_value(val)                                                         \
+    do {                                                                       \
+        int pos =                                                              \
+            chunk_writeconstant(&state->chunk, (val), &state->allocator);      \
+        chunk_writebyte(&state->chunk, OP_CONSTANT, 0, &state->allocator);     \
+        chunk_writebyte(&state->chunk, pos, 0, &state->allocator);             \
+    } while (false)
+    add_value(33);
+    add_value(55);
+    chunk_writebyte(&state->chunk, OP_ADD, 0, &state->allocator);
     chunk_writebyte(&state->chunk, OP_RETURN, 1, &state->allocator);
 #ifdef DEBUG_PRINT_CODE
     debug_dissasemble_chunk(&state->chunk, "test chunk");

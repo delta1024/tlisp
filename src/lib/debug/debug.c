@@ -14,7 +14,7 @@ int simple_instruction(const char *name, int offset) {
     printf("%s\n", name);
     return offset + 1;
 }
-int constant_instruction(const char *name, const chunk_t *chunk, int offset ) {
+int constant_instruction(const char *name, const chunk_t *chunk, int offset) {
     int index = chunk->code[offset + 1];
     printf("%-16s %d '", name, index);
     value_print(chunk->constants.entries[index]);
@@ -30,8 +30,12 @@ int debug_dissasemble_instruction(const chunk_t *chunk, int offset) {
     }
     int byte = chunk->code[offset];
     switch (byte) {
-    case OP_CONSTANT: 
+    case OP_CONSTANT:
         return constant_instruction(op_strs[byte], chunk, offset);
+    case OP_ADD:
+    case OP_SUBTRACT:
+    case OP_MULTIPLY:
+    case OP_DIVIDE:
     case OP_RETURN:
         return simple_instruction(op_strs[byte], offset);
     default:

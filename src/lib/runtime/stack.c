@@ -14,7 +14,7 @@ tlisp_error_t stack_push(value_stack *stack, tlisp_value value) {
     return TLISP_ERR_OK;
 }
 bool stack_pop(value_stack *stack, tlisp_value *value) {
-    if (stack->stack_top == stack->buffer) 
+    if (stack->stack_top == stack->buffer)
         return false;
     *value = *--stack->stack_top;
     return true;

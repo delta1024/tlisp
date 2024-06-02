@@ -29,7 +29,8 @@ void chunk_writebyte(chunk_t *chunk, uint8_t byte, uint8_t line,
     chunk->lines[chunk->count++] = line;
 }
 
-int chunk_writeconstant(chunk_t *chunk, tlisp_value value, allocator *allocator) {
+int chunk_writeconstant(chunk_t *chunk, tlisp_value value,
+                        allocator *allocator) {
     value_array_write(&chunk->constants, value, allocator);
     return chunk->constants.count - 1;
 }

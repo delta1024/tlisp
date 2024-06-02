@@ -15,6 +15,7 @@ typedef struct {
 void chunk_init(chunk_t *chunk);
 void chunk_writebyte(chunk_t *chunk, uint8_t byte, uint8_t line,
                      allocator *allocator);
-int chunk_writeconstant(chunk_t *chunk, tlisp_value value, allocator *allocator);
+int chunk_writeconstant(chunk_t *chunk, tlisp_value value,
+                        allocator *allocator);
 void chunk_free(chunk_t *chunk, allocator *allocator);
 #endif // !_TLISP_CHUNK_H_i_
