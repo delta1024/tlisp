@@ -1,7 +1,7 @@
 #ifndef _TLISP_VM_H__
 #define _TLISP_VM_H__
 #include "arrays/chunk.h"
-#include "stack.h"
+#include "core/stack.h"
 #include "tlisp/types.h"
 #include <stdio.h>
 

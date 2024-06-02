@@ -3,8 +3,8 @@
 #include "arrays/chunk.h"
 #include "core/errors.h"
 #include "core/memory.h"
+#include "core/stack.h"
 #include "runtime/vm.h"
-#include "runtime/stack.h"
 #include <stddef.h>
 struct tlisp_state {
     error_array errors;

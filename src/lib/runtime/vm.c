@@ -1,9 +1,9 @@
 #include "vm.h"
 #include "config.h"
 #include "core/errors.h"
+#include "core/stack.h"
 #include "core/value.h"
 #include "opcode.h"
-#include "stack.h"
 #include "tlisp/types.h"
 #include <stdarg.h>
 #include <stdio.h>

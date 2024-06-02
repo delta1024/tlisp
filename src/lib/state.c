@@ -3,8 +3,8 @@
 #include "config.h"
 #include "core/errors.h"
 #include "core/memory.h"
+#include "core/stack.h"
 #include "runtime/opcode.h" // IWYU pragma: keep
-#include "runtime/stack.h"
 #include "runtime/vm.h"
 #include "state.h"          // IWYU pragma: keep
 #include "tlisp/errors.h"

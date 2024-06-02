@@ -1,5 +1,5 @@
-#ifndef _TLISP_RUNTIME_STACK_H__
-#define _TLISP_RUNTIME_STACK_H__
+#ifndef _TLISP_CORE_STACK_H__
+#define _TLISP_CORE_STACK_H__
 #include "config.h"
 #include "tlisp/types.h"
 #include <stdint.h>
@@ -17,4 +17,4 @@ tlisp_error_t stack_push(value_stack *stack, tlisp_value value);
  * @returns true if a value was yeilded
  */
 bool stack_pop(value_stack *stack, tlisp_value *value);
-#endif // !_TLISP_RUNTIME_STACK_H__
+#endif // !_TLISP_CORE_STACK_H__
