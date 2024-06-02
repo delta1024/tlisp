@@ -34,9 +34,26 @@ tlisp_result_t runtime_error(vm *vm, tlisp_error_t errn, const char *message,
                    format, line);
     return TLISP_RESULT_ERR;
 }
+tlisp_result_t vm_push(vm *vm, tlisp_value value) {
+    tlisp_error_t res;
+    if ((res = stack_push(vm->stack, value)) != TLISP_ERR_OK) {
+        return runtime_error(vm, res, "too many values in one chunk.");
+    }
+    return TLISP_RESULT_OK;
+}
+
 tlisp_result_t vm_interpret(vm *vm) {
 #define read_byte() (*vm->ip++)
 #define read_constant() (vm->chunk->constants.entries[read_byte()])
+#define binary_op(op)                                                          \
+    do {                                                                       \
+        tlisp_value b;                                                         \
+        tlisp_value a;                                                         \
+        stack_pop(vm->stack, &b);                                              \
+        stack_pop(vm->stack, &a);                                              \
+        if (vm_push(vm, (a op b)) != TLISP_RESULT_OK)                          \
+            return TLISP_RESULT_ERR;                                           \
+    } while (false);
     for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
         printf("\t");
@@ -48,15 +65,26 @@ tlisp_result_t vm_interpret(vm *vm) {
         printf("\n");
         debug_dissasemble_instruction(vm->chunk, vm->ip - vm->chunk->code);
 #endif /* ifdef DEBUG_TRACE_EXECUTION */
+
         int byte = read_byte();
         switch (byte) {
+        case OP_ADD:
+            binary_op(+);
+            break;
+        case OP_SUBTRACT:
+            binary_op(-);
+            break;
+        case OP_MULTIPLY:
+            binary_op(*);
+            break;
+        case OP_DIVIDE:
+            binary_op(/);
+            break;
         case OP_CONSTANT: {
-                tlisp_error_t res;
-                tlisp_value value = read_constant();
-                if ((res = stack_push(vm->stack, value)) != TLISP_ERR_OK) {
-                    return runtime_error(vm, res, "too many values in one chunk.");
-                }
-                break;
+            tlisp_value value = read_constant();
+            if (vm_push(vm, value) != TLISP_RESULT_OK)
+                return TLISP_RESULT_ERR;
+            break;
         }
         case OP_RETURN: {
                 tlisp_value value;
@@ -72,4 +100,5 @@ tlisp_result_t vm_interpret(vm *vm) {
     }
 #undef read_byte
 #undef read_constant
+#undef binary_op
 }
