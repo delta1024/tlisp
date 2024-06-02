@@ -23,9 +23,9 @@ endif
  test_dep = feat_build_tests.enabled() ? \
      declare_dependency() : disabler()
 
-
 subdir('include')
 subdir('src/lib')
+subdir('src/bin')
 
 configure_file( input : 'config.h.in',
                 output: 'config.h',
