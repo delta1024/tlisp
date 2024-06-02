@@ -3,10 +3,6 @@
 #include "tlisp/types.h"
 #include <stdio.h>
 #include <stdbool.h>
-typedef enum {
-    TLISP_RESULT_OK,
-    TLISP_RESULT_ERR,
-} result_t;
 typedef struct error_array {
     tlisp_error *errors;
     int count;

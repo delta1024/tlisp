@@ -1,6 +1,7 @@
 #ifndef INCLUDE_tlisp_types_h
 #define INCLUDE_tlisp_types_h
 
+#include <stdbool.h>
 /**
  * @file tlisp/types.h
  * @brief libtlisp base types
@@ -19,7 +20,14 @@ typedef enum {
     TLISP_ERR_UNTERMITATED_STRING =
         -2,               /**< Lexer has encountered an unterminated string */
     TLISP_ERR_STACK_OVERFLOW = -3, /**< Runtime stack overflow */
+    TLISP_ERR_WRNG_OPCODE = -4, /**< Runtime encountered an unknown opcode */
 } tlisp_error_t;
+
+/** Result from a failable function */
+typedef enum {
+    TLISP_RESULT_OK = true, /**< No error has occured. */
+    TLISP_RESULT_ERR = false, /**< An error has occured. Call \ref tlisp_error_next() to get details */
+} tlisp_result_t;
 
 /** A tlisp error value */
 typedef struct {
