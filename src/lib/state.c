@@ -9,7 +9,11 @@
 #include "tlisp/types.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "config.h"
+#ifdef DEBUG_PRINT_CODE
+#include "debug/debug.h"
+#endif /* ifdef DEBUG_PRINT_CODE
+#include "debug/debug.h" */
 tlisp_state *tlisp_state_open() {
     tlisp_state *state = malloc(sizeof(tlisp_state));
     if (state == NULL)
@@ -37,6 +41,10 @@ void tlisp_state_close(tlisp_state *state) {
 }
 tlisp_result_t tlisp_state_loadbuffer(tlisp_state *state, const char *buffer, int blen) {
     chunk_writebyte(&state->chunk, OP_RETURN, 0, &state->allocator);
+#ifdef DEBUG_PRINT_CODE
+    debug_dissasemble_chunk(&state->chunk, "test chunk");
+    printf("\n");
+#endif /* ifdef DEBUG_PRINT_CODE */
     return TLISP_RESULT_OK;
 }
 

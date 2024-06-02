@@ -5,6 +5,10 @@
 #include "opcode.h"
 #include "tlisp/types.h"
 #include "core/errors.h"
+#include "config.h"
+#ifdef DEBUG_TRACE_EXECUTION
+#include "debug/debug.h"
+#endif /* ifdef DEBUG_TRACE_EXECUTION */
 
 tlisp_result_t runtime_error(vm *vm,tlisp_error_t errn, const char *message, ...) {
 va_list args;
@@ -29,6 +33,10 @@ va_list args;
 tlisp_result_t vm_interpret(vm *vm) {
     #define read_byte() (*vm->ip++)
     for (;;) {
+        #ifdef DEBUG_TRACE_EXECUTION
+        debug_dissasemble_instruction(vm->chunk, 
+                                      vm->ip - vm->chunk->code);
+        #endif /* ifdef DEBUG_TRACE_EXECUTION */
         int byte = read_byte();
         switch (byte) {
             case OP_RETURN: 

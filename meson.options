@@ -1,4 +1,5 @@
 option('build_tests',type : 'feature', value : 'auto')
 option('language_debug', type : 'feature', value : 'auto')
 option('debug_trace_execution', type : 'feature', value : 'auto')
+option('debug_print_code', type : 'feature', value : 'auto')
 option('build_repl_binary', type: 'feature', value : 'enabled')
