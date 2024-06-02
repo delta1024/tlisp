@@ -4,6 +4,7 @@
 #include "core/errors.h"
 #include "core/memory.h"
 #include "runtime/opcode.h" // IWYU pragma: keep
+#include "runtime/stack.h"
 #include "runtime/vm.h"
 #include "state.h"          // IWYU pragma: keep
 #include "tlisp/errors.h"
@@ -27,6 +28,7 @@ tlisp_state *tlisp_state_open() {
     state->vm.chunk  = NULL;
     state->vm.ip     = NULL;
     state->vm.errout = error_openstream(&state->errors);
+    state->vm.stack = &state->stack;
     return state;
 }
 void tlisp_state_close(tlisp_state *state) {
@@ -57,7 +59,7 @@ tlisp_result_t tlisp_state_call(tlisp_state *state, int dist, int params,
     vm *vm    = &state->vm;
     vm->chunk = &state->chunk;
     vm->ip    = vm->chunk->code;
-
+    stack_reset(vm->stack);
     tlisp_result_t check = TLISP_RESULT_OK;
     if (!(check = vm_interpret(vm)))
         return check;

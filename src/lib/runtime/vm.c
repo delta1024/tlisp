@@ -3,6 +3,7 @@
 #include "core/errors.h"
 #include "core/value.h"
 #include "opcode.h"
+#include "stack.h"
 #include "tlisp/types.h"
 #include <stdarg.h>
 #include <stdio.h>
@@ -38,21 +39,35 @@ tlisp_result_t vm_interpret(vm *vm) {
 #define read_constant() (vm->chunk->constants.entries[read_byte()])
     for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
+        printf("\t");
+        for (tlisp_value *slot = vm->stack->buffer; slot < vm->stack->stack_top; slot++) {
+            printf("[ ");
+            value_print(*slot);
+            printf(" ]");
+        }
+        printf("\n");
         debug_dissasemble_instruction(vm->chunk, vm->ip - vm->chunk->code);
 #endif /* ifdef DEBUG_TRACE_EXECUTION */
         int byte = read_byte();
         switch (byte) {
         case OP_CONSTANT: {
+                tlisp_error_t res;
                 tlisp_value value = read_constant();
-                value_print(value);
-                printf("\n");
+                if ((res = stack_push(vm->stack, value)) != TLISP_ERR_OK) {
+                    return runtime_error(vm, res, "too many values in one chunk.");
+                }
                 break;
         }
-        case OP_RETURN:
+        case OP_RETURN: {
+                tlisp_value value;
+                if (stack_pop(vm->stack, &value)) {
+                    value_print(value);
+                    printf("\n");
+                }
             return TLISP_RESULT_OK;
+            }
         default:
-            runtime_error(vm, TLISP_ERR_WRNG_OPCODE, "unknown opcode %d", byte);
-            return TLISP_RESULT_ERR;
+            return runtime_error(vm, TLISP_ERR_WRNG_OPCODE, "unknown opcode %d", byte);
         }
     }
 #undef read_byte

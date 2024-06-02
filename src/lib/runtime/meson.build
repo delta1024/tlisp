@@ -1,5 +1,6 @@
 tlispruntime_sources = [
   'vm.h', 'vm.c',
+  'stack.h', 'stack.c',
   'opcode.h', 'opcode_strs.h' ]
   run_deps = [tlispcore_dep, tlisparrays_dep]
 if tlispdebug_dep.found() 

@@ -5,6 +5,7 @@ project('tlisp', 'c',
 )
 
 conf_data = configuration_data()
+conf_data.set('uint8_max', 256)
 
 config_inc = include_directories('.')
 inc = include_directories('include')
