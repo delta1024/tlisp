@@ -1,7 +1,7 @@
 project('tlisp', 'c',
   version: '0.0.1',
   license: 'MIT',
-  default_options: 'c_std=gnu11'
+  default_options: 'c_std=c11'
 )
 
 conf_data = configuration_data()
@@ -17,9 +17,11 @@ feat_language_debug = get_option('language_debug')\
 if feat_language_debug.enabled() 
   conf_data.set('LANG_DEBUG', true)
 endif
-
+unity_dep = dependency('unity', fallback: ['unity', 'unity_dep'])
+if unity_dep.found()
  test_dep = feat_build_tests.enabled() ? \
-     declare_dependency() : disabler()
+     unity_dep : disabler()
+ endif
 
 subdir('include')
 subdir('src/lib')
