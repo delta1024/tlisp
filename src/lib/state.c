@@ -24,11 +24,10 @@ tlisp_state *tlisp_state_open() {
     state->allocator.ud            = &state->mem_usage;
     state->allocator.f             = default_callbacks;
     state->errors                  = (error_array){NULL};
-    state->errstream = error_openstream(&state->errors);
     chunk_init(&state->chunk);
     state->vm.chunk  = NULL;
     state->vm.ip     = NULL;
-    state->vm.errout = &state->errstream;
+    state->vm.errout = error_openstream(&state->errors);
     state->stack     = &state->vm.stack;
     return state;
 }
@@ -39,6 +38,7 @@ void tlisp_state_close(tlisp_state *state) {
     }
     free(state->errors.errors);
     chunk_free(&state->chunk, &state->allocator);
+    fclose(state->vm.errout);
     free(state);
 }
 tlisp_result_t tlisp_state_loadbuffer(tlisp_state *state, const char *buffer,

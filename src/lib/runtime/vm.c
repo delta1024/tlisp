@@ -22,7 +22,7 @@ tlisp_result_t runtime_error(vm *vm, tlisp_error_t errn, const char *message,
     int len = vsnprintf(NULL, 0, message, count) + 1;
     va_end(count);
 
-    char *format = malloc(len);
+    char *format = alloca(len);
     int end      = vsnprintf(format, len, message, args);
     format[end]  = '\0';
 
@@ -32,7 +32,6 @@ tlisp_result_t runtime_error(vm *vm, tlisp_error_t errn, const char *message,
     int line   = vm->chunk->lines[offset];
     error_adderror(vm->errout, errn, "Error: %s - [line: %d] in script\n",
                    format, line);
-    free(format);
     return TLISP_RESULT_ERR;
 }
 tlisp_result_t vm_push(vm *vm, tlisp_value value) {

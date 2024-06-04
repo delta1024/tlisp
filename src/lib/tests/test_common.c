@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 int _test_fail(const char *callee, const char *message, ...) {
-    fprintf(stderr, "not ok - %s: ", callee);
+    fprintf(stderr, "not ok: %s - ", callee);
     va_list args;
     va_start(args, message);
     vfprintf(stderr, message, args);
@@ -10,6 +10,6 @@ int _test_fail(const char *callee, const char *message, ...) {
     return 1;
 }
 int _test_pass(const char *callee) {
-    printf("ok - %s/n", callee);
+    printf("ok: %s/n", callee);
     return 0;
 }

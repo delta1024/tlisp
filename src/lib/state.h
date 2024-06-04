@@ -8,7 +8,6 @@
 #include <stddef.h>
 struct tlisp_state {
     error_array errors;
-    error_stream errstream;
     mem_tracker mem_usage;
     allocator allocator;
     chunk_t chunk;
