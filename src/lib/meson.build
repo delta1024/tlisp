@@ -1,12 +1,14 @@
 subdir('core') 
 subdir('arrays')
 subdir('debug')
+subdir('compiler')
 subdir('runtime')
 libtlisp_sources = [ 'state.c', 'state.h', 'errors.c' ]
 lib_deps = [
     tlispcore_dep,
     tlisparrays_dep,
     tlispruntime_dep,
+    tlispcompiler_dep,
 ]
 if tlispdebug_dep.found() 
     lib_deps += tlispdebug_dep 
