@@ -1,5 +1,6 @@
 #include "tlisp/state.h"
 #include "arrays/chunk.h"
+#include "compiler/token.h"
 #include "config.h"
 #include "core/errors.h"
 #include "core/memory.h"
@@ -9,12 +10,9 @@
 #include "state.h"          // IWYU pragma: keep
 #include "tlisp/errors.h"
 #include "tlisp/types.h"
+#include "compiler/scanner.h"
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef DEBUG_PRINT_CODE
-#include "debug/debug.h"
-#endif /* ifdef DEBUG_PRINT_CODE                                               \
-#include "debug/debug.h" */
 tlisp_state *tlisp_state_open() {
     tlisp_state *state = malloc(sizeof(tlisp_state));
     if (state == NULL)
@@ -43,32 +41,15 @@ void tlisp_state_close(tlisp_state *state) {
 }
 tlisp_result_t tlisp_state_loadbuffer(tlisp_state *state, const char *buffer,
                                       int blen) {
-#define add_value(val)                                                         \
-    do {                                                                       \
-        int pos =                                                              \
-            chunk_writeconstant(&state->chunk, (val), &state->allocator);      \
-        chunk_writebyte(&state->chunk, OP_CONSTANT, 0, &state->allocator);     \
-        chunk_writebyte(&state->chunk, pos, 0, &state->allocator);             \
-    } while (false)
-    add_value(33);
-    add_value(55);
-    chunk_writebyte(&state->chunk, OP_ADD, 0, &state->allocator);
-    chunk_writebyte(&state->chunk, OP_RETURN, 1, &state->allocator);
-#ifdef DEBUG_PRINT_CODE
-    debug_dissasemble_chunk(&state->chunk, "test chunk");
-    printf("\n");
-#endif /* ifdef DEBUG_PRINT_CODE */
+    scanner_init(&state->scanner, buffer, blen);
     return TLISP_RESULT_OK;
 }
 
 tlisp_result_t tlisp_state_call(tlisp_state *state, int dist, int params,
                                 int nret_vals) {
-    vm *vm    = &state->vm;
-    vm->chunk = &state->chunk;
-    vm->ip    = vm->chunk->code;
-    stack_reset(&vm->stack);
-    tlisp_result_t check = TLISP_RESULT_OK;
-    if (!(check = vm_interpret(vm)))
-        return check;
-    return check;
+    ttoken token;
+    while ((token = scanner_next(&state->scanner)).type != TOKEN_EOF) {
+        printf("[%d, %.*s, %d]\n", token.type, token.len, token.start, token.line);
+    }
+    return TLISP_RESULT_OK;
 }

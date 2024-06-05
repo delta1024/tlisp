@@ -4,6 +4,7 @@
 #include "core/errors.h"
 #include "core/memory.h"
 #include "core/stack.h"
+#include "compiler/scanner.h"
 #include "runtime/vm.h"
 #include <stddef.h>
 struct tlisp_state {
@@ -11,6 +12,7 @@ struct tlisp_state {
     mem_tracker mem_usage;
     allocator allocator;
     chunk_t chunk;
+    tscanner scanner;
     value_stack *stack;
     vm vm;
 };
