@@ -53,6 +53,13 @@ static char peek(const tscanner *scanner) {
     }
     return *scanner->current;
 }
+static char peek_next(const tscanner *scanner) {
+    if (at_end(scanner)) {
+        return '\0';
+    }
+
+    return *(scanner->current + 1);
+}
 static ttoken number(tscanner *scanner) {
     while (!at_end(scanner) && is_number(peek(scanner))) {
         advance(scanner);
@@ -109,11 +116,35 @@ static ttoken identifier(tscanner *scanner) {
     ttoken_t type = identifier_type(scanner);
     return create_token(scanner, type);
 }
+static void skip_whitespace(tscanner *scanner) {
+    for (;;) {
+        if (at_end(scanner)) return;
+        char c = peek(scanner);
+        switch (c) {
+            case '\n':
+                scanner->line++;
+            case '\t':
+            case ' ':
+            case '\r':
+                advance(scanner);
+            break;
+            case ';': {
+            while (!at_end(scanner) && peek_next(scanner) != '\n') {
+                    advance(scanner);
+            }
+                break;
+            }
+                default:
+            return;
+        }
+    }
+}
 ttoken scanner_next(tscanner *scanner) {
+    skip_whitespace(scanner);
+    scanner->start = scanner->current;
     if (at_end(scanner)) {
         return create_token(scanner, TOKEN_EOF);
     }
-    scanner->start = scanner->current;
     char c = advance(scanner);
     if (is_number(c)) {
         return number(scanner);
