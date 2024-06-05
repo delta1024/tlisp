@@ -16,18 +16,6 @@ static char advance(tscanner *scanner) {
         return '\0';
     return *scanner->current++;
 }
-static bool check(const tscanner *scanner, char c) {
-    if (at_end(scanner))
-        return false;
-    return *scanner->current == c;
-}
-static bool match(tscanner *scanner, char c){
-    if (check(scanner, c)) {
-        advance(scanner);
-        return true;
-    }
-    return false;
-}
 static ttoken create_token(const tscanner *scanner, ttoken_t type) {
     ttoken token;
     token.type = type;
@@ -52,31 +40,19 @@ ttoken scanner_next(tscanner *scanner) {
     char c = advance(scanner);
     switch (c) {
         case '+':
-        return create_token(scanner, TOKEN_PLUS);
+        return create_token(scanner, TLISP_TOKEN_PLUS);
         case '-':
-        return create_token(scanner, TOKEN_MINUS);
+        return create_token(scanner, TLISP_TOKEN_MINUS);
         case '*':
-            return create_token(scanner, TOKEN_STAR);
+            return create_token(scanner, TLISP_TOKEN_STAR);
         case '/':
-        return create_token(scanner, TOKEN_SLASH);
+        return create_token(scanner, TLISP_TOKEN_SLASH);
         case '\'':
-        return create_token(scanner, TOKEN_TICK);
+        return create_token(scanner, TLISP_TOKEN_TICK);
         case '(':
-        return create_token(scanner, TOKEN_LPAREN);
+        return create_token(scanner, TLISP_TOKEN_LPAREN);
         case ')':
-        return create_token(scanner, TOKEN_RPAREN);
-        case '=':
-        return create_token(scanner, match(scanner, '=') ?
-                            TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
-        case '>':
-        return create_token(scanner, match(scanner, '=') ?
-                            TOKEN_GT_EQUAL : TOKEN_GT);
-        case '<':
-        return create_token(scanner, match(scanner, '=') ?
-                            TOKEN_LT_EQUAL : TOKEN_LT);
-        case '!':
-        return create_token(scanner, match(scanner, '=') ?
-                            TOKEN_BANG_EQUAL : TOKEN_BANG);
+        return create_token(scanner, TLISP_TOKEN_RPAREN);
         default:
         return err_token(scanner, "unknown token");
     }
