@@ -101,6 +101,17 @@ ttoken scanner_next(tscanner *scanner) {
         case '!':
         return create_token(scanner, match(scanner, '=') ?
                             TOKEN_BANG_EQUAL : TOKEN_BANG);
+        case '"': {
+            while (!at_end(scanner) && peek(scanner) != '"') {
+                advance(scanner);
+            }
+            if (at_end(scanner)) {
+                return err_token(scanner, "Unterminated string");
+            }
+            advance(scanner);
+            return  create_token(scanner, TOKEN_STRING);
+        }
+
         default:
         return err_token(scanner, "unknown token");
     }
