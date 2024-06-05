@@ -1,4 +1,4 @@
-tlispcompiler_sources = []
+tlispcompiler_sources = ['scanner.h', 'token.h']
 tlispcompiler_deps = [
     tlispcore_dep,
     tlisparrays_dep,
