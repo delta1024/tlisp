@@ -71,11 +71,43 @@ static bool is_alpha(char c) {
 static bool is_alpha_numer(char c) {
     return is_alpha(c) || is_number(c);
 }
+static ttoken_t check_ident(const tscanner *scanner, int start, const char *rest, int len, ttoken_t ident) {
+    if (scanner->current - start - scanner->start == len &&
+        memcmp(scanner->start + start, rest, len) == 0) {
+        return ident;
+    }
+    return TOKEN_NAME;
+
+}
+static ttoken_t identifier_type(tscanner *scanner) {
+    switch (*scanner->start) {
+        case 'q':
+            return check_ident(scanner, 1, "uote", 4, TOKEN_QUOTE);
+        case 'c': if (scanner->current - scanner->start > 1) {
+            switch (scanner->start[1]) {
+                case 'o':
+                    return check_ident(scanner, 2, "ns", 2, TOKEN_CONS);
+                case 'a':
+                    return check_ident(scanner, 2, "r", 1, TOKEN_CAR);
+                default:
+                    return TOKEN_NAME;
+            }
+        } else return TOKEN_NAME;
+        
+        case 't':
+            return check_ident(scanner, 1, "rue", 3, TOKEN_TRUE);
+        case 'f':
+            return check_ident(scanner, 1, "alse", 4,TOKEN_FALSE);
+        default:
+            return TOKEN_NAME;
+    }
+}
 static ttoken identifier(tscanner *scanner) {
     while (!at_end(scanner) && is_alpha_numer(peek(scanner))) {
         advance(scanner);
     }
-    return create_token(scanner, TOKEN_NAME);
+    ttoken_t type = identifier_type(scanner);
+    return create_token(scanner, type);
 }
 ttoken scanner_next(tscanner *scanner) {
     if (at_end(scanner)) {
@@ -88,6 +120,7 @@ ttoken scanner_next(tscanner *scanner) {
     }
     if (is_alpha(c))
         return identifier(scanner);
+
     switch (c) {
         case '+':
         return create_token(scanner, TOKEN_PLUS);
