@@ -19,4 +19,4 @@ libtlisp = library('tlisp',
 libtlisp_dep = declare_dependency(
     link_with : libtlisp, 
     include_directories : inc) 
-subdir('tests', if_found: test_dep)
+subdir('tests', if_found: unity_dep)

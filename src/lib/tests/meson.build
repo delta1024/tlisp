@@ -1,8 +1,8 @@
-testerrstream = executable('testerrstream', 'errStream.c', 'test_common.c',
+testerrstream = executable('testerrstream', 'errStream.c', 
   include_directories : [tlispcore_inc],
-  dependencies: [test_dep, libtlisp_dep])
+  dependencies: [unity_dep, libtlisp_dep])
 test('errStream test', testerrstream)
 
-testerradd = executable('testerradd', 'errAdd.c', 'test_common.c',
-  dependencies: [test_dep, libtlisp_dep])
+testerradd = executable('testerradd', 'errAdd.c',
+  dependencies: [unity_dep, libtlisp_dep])
 test('errAdd test', testerradd)

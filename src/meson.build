@@ -10,8 +10,11 @@ if feat_language_debug.enabled()
   conf_data.set('LANG_DEBUG', true)
 endif
 
- test_dep = feat_build_tests.enabled() ? \
-     declare_dependency() : disabler()
-
+if feat_build_tests.enabled()
+    unity_proj = subproject('unity')
+    unity_dep = unity_proj.get_variable('unity_dep')
+else
+    unity_dep = disabler()
+endif
 subdir('lib')
 subdir('bin')
