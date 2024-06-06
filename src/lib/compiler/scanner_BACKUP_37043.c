@@ -65,6 +65,9 @@ ttoken scanner_next(tscanner *scanner) {
         return create_token(scanner, TOKEN_LPAREN);
         case ')':
         return create_token(scanner, TOKEN_RPAREN);
+<<<<<<< HEAD
+=======
+
         case '=':
         return create_token(scanner, match(scanner, '=') ?
                             TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
@@ -77,6 +80,7 @@ ttoken scanner_next(tscanner *scanner) {
         case '!':
         return create_token(scanner, match(scanner, '=') ?
                             TOKEN_BANG_EQUAL : TOKEN_BANG);
+>>>>>>> 9e09e80 (feat(scanner): multi character tokens)
         default:
         return err_token(scanner, "unknown token");
     }

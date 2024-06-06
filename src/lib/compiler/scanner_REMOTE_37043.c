@@ -65,6 +65,7 @@ ttoken scanner_next(tscanner *scanner) {
         return create_token(scanner, TOKEN_LPAREN);
         case ')':
         return create_token(scanner, TOKEN_RPAREN);
+
         case '=':
         return create_token(scanner, match(scanner, '=') ?
                             TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
