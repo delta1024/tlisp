@@ -65,6 +65,18 @@ static ttoken number(tscanner *scanner) {
     }
     return create_token(scanner, TOKEN_NUMBER);
 }
+static bool is_alpha(char c) {
+    return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
+}
+static bool is_alpha_numer(char c) {
+    return is_alpha(c) || is_number(c);
+}
+static ttoken identifier(tscanner *scanner) {
+    while (!at_end(scanner) && is_alpha_numer(peek(scanner))) {
+        advance(scanner);
+    }
+    return create_token(scanner, TOKEN_NAME);
+}
 ttoken scanner_next(tscanner *scanner) {
     if (at_end(scanner)) {
         return create_token(scanner, TOKEN_EOF);
@@ -74,6 +86,8 @@ ttoken scanner_next(tscanner *scanner) {
     if (is_number(c)) {
         return number(scanner);
     }
+    if (is_alpha(c))
+        return identifier(scanner);
     switch (c) {
         case '+':
         return create_token(scanner, TOKEN_PLUS);
