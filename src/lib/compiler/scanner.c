@@ -44,12 +44,36 @@ static ttoken err_token(const tscanner *scanner, const char *message) {
     token.line = scanner->line;
     return token;
 }
+static bool is_number(char c) {
+    return '0' <= c && c <= '9';
+}
+static char peek(const tscanner *scanner) {
+    if (at_end(scanner)) {
+        return '\0';
+    }
+    return *scanner->current;
+}
+static ttoken number(tscanner *scanner) {
+    while (!at_end(scanner) && is_number(peek(scanner))) {
+        advance(scanner);
+    }
+    if (peek(scanner) == '.') {
+        advance(scanner);
+    while (!at_end(scanner) && is_number(peek(scanner))) {
+        advance(scanner);
+    }
+    }
+    return create_token(scanner, TOKEN_NUMBER);
+}
 ttoken scanner_next(tscanner *scanner) {
     if (at_end(scanner)) {
         return create_token(scanner, TOKEN_EOF);
     }
     scanner->start = scanner->current;
     char c = advance(scanner);
+    if (is_number(c)) {
+        return number(scanner);
+    }
     switch (c) {
         case '+':
         return create_token(scanner, TOKEN_PLUS);
