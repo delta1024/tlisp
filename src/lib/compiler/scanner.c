@@ -8,7 +8,7 @@ void scanner_init(tscanner *scanner, const char *buffer, int blen) {
     scanner->start = scanner->current = scanner->source.chars = buffer;
     scanner->source.length = blen;
 }
-static bool at_end(tscanner *scanner){
+static bool at_end(const tscanner *scanner){
     return (scanner->current - scanner->source.chars) == scanner->source.length;
 }
 static char advance(tscanner *scanner) {
@@ -16,7 +16,7 @@ static char advance(tscanner *scanner) {
         return '\0';
     return *scanner->current++;
 }
-ttoken create_token(tscanner *scanner, ttoken_t type) {
+static ttoken create_token(const tscanner *scanner, ttoken_t type) {
     ttoken token;
     token.type = type;
     token.start = scanner->start;
@@ -24,7 +24,7 @@ ttoken create_token(tscanner *scanner, ttoken_t type) {
     token.line = scanner->line;
     return token;
 }
-ttoken err_token(tscanner *scanner, const char *message) {
+static ttoken err_token(const tscanner *scanner, const char *message) {
     ttoken token;
     token.type = TOKEN_ERROR;
     token.start = message;
@@ -39,6 +39,20 @@ ttoken scanner_next(tscanner *scanner) {
     scanner->start = scanner->current;
     char c = advance(scanner);
     switch (c) {
+        case '+':
+        return create_token(scanner, TOKEN_PLUS);
+        case '-':
+        return create_token(scanner, TOKEN_MINUS);
+        case '*':
+            return create_token(scanner, TOKEN_STAR);
+        case '/':
+        return create_token(scanner, TOKEN_SLASH);
+        case '\'':
+        return create_token(scanner, TOKEN_TICK);
+        case '(':
+        return create_token(scanner, TOKEN_LPAREN);
+        case ')':
+        return create_token(scanner, TOKEN_RPAREN);
         default:
         return err_token(scanner, "unknown token");
     }
