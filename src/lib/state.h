@@ -1,10 +1,10 @@
 #ifndef _TLISP_STATE_H__
 #define _TLISP_STATE_H__
 #include "arrays/chunk.h"
+#include "compiler/scanner.h"
 #include "core/errors.h"
 #include "core/memory.h"
 #include "core/stack.h"
-#include "compiler/scanner.h"
 #include "runtime/vm.h"
 #include <stddef.h>
 struct tlisp_state {

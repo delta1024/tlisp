@@ -1,5 +1,6 @@
 #include "tlisp/state.h"
 #include "arrays/chunk.h"
+#include "compiler/scanner.h"
 #include "compiler/token.h"
 #include "config.h"
 #include "core/errors.h"
@@ -10,7 +11,6 @@
 #include "state.h"          // IWYU pragma: keep
 #include "tlisp/errors.h"
 #include "tlisp/types.h"
-#include "compiler/scanner.h"
 #include <stdio.h>
 #include <stdlib.h>
 tlisp_state *tlisp_state_open() {
@@ -49,7 +49,8 @@ tlisp_result_t tlisp_state_call(tlisp_state *state, int dist, int params,
                                 int nret_vals) {
     ttoken token;
     while ((token = scanner_next(&state->scanner)).type != TOKEN_EOF) {
-        printf("[%d, %.*s, %d]\n", token.type, token.len, token.start, token.line);
+        printf("[%d, %.*s, %d]\n", token.type, token.len, token.start,
+               token.line);
     }
     return TLISP_RESULT_OK;
 }

@@ -3,8 +3,8 @@
 
 typedef enum {
     TOKEN_ERROR = -1,
-    TOKEN_EOF = 0,
-    TOKEN_PLUS = 1,
+    TOKEN_EOF   = 0,
+    TOKEN_PLUS  = 1,
     TOKEN_MINUS,
     TOKEN_STAR,
     TOKEN_SLASH,
@@ -37,6 +37,6 @@ typedef struct {
     const char *start;
     int len;
     int line;
-} ttoken ;
+} ttoken;
 
 #endif // !_TLISP_TOKEN_H__
