@@ -1,0 +1,29 @@
+BUILD = "build"
+
+file "#{BUILD}" => [] do 
+  sh "meson setup #{BUILD}"
+end
+
+desc "Reconfigure build dir"
+task :reconfigure  do 
+  sh "meson setup #{BUILD} --reconfigure"
+end
+
+desc "Compile project"
+task compile: "#{BUILD}" do
+  sh "meson compile -C #{BUILD}"
+end
+
+
+desc "Clean up build artifacts"
+task :clean do 
+  sh "rm -rf #{BUILD}"
+  sh "rm compile_commands.json"
+end
+
+desc "Run repl"
+task run: :compile do
+  sh "./build/src/bin/tlisp"
+end
+
+task default: :compile

@@ -1,0 +1,3 @@
+CompilerFlags:
+  Add: [-xc, -xc-headers]
+  CompilationDatabase: build
