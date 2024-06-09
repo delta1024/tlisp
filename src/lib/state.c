@@ -1,5 +1,6 @@
 #include "tlisp/state.h"
 #include "arrays/chunk.h"
+#include "compiler/parser.h"
 #include "compiler/scanner.h"
 #include "compiler/token.h"
 #include "config.h"
@@ -41,16 +42,18 @@ void tlisp_state_close(tlisp_state *state) {
 }
 tlisp_result_t tlisp_state_loadbuffer(tlisp_state *state, const char *buffer,
                                       int blen) {
-    scanner_init(&state->scanner, buffer, blen);
+    parser_init(&state->parser, buffer, blen, error_openstream(&state->errors), &state->allocator);
+    if (!parser_compile(&state->parser, &state->chunk))
+        return TLISP_RESULT_ERR;
     return TLISP_RESULT_OK;
 }
 
 tlisp_result_t tlisp_state_call(tlisp_state *state, int dist, int params,
                                 int nret_vals) {
-    ttoken token;
-    while ((token = scanner_next(&state->scanner)).type != TOKEN_EOF) {
-        printf("[%d, %.*s, %d]\n", token.type, token.len, token.start,
-               token.line);
-    }
+    stack_reset(&state->vm.stack);
+    state->vm.chunk = &state->chunk;
+    state->vm.ip = state->chunk.code;
+    if (!vm_interpret(&state->vm))
+        return TLISP_RESULT_ERR;
     return TLISP_RESULT_OK;
 }
