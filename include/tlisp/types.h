@@ -21,6 +21,7 @@ typedef enum {
         -2,               /**< Lexer has encountered an unterminated string */
     TLISP_ERR_STACK_OVERFLOW = -3, /**< Runtime stack overflow */
     TLISP_ERR_WRNG_OPCODE = -4, /**< Runtime encountered an unknown opcode */
+    TLISP_ERR_EXPECTED_EOF = -5, /**< Parser encountered unexpecded End of File */
 } tlisp_error_t;
 
 /** Result from a failable function */
