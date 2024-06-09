@@ -12,7 +12,7 @@ int tlisp_error_flush(tlisp_state *state, FILE *stream) {
     error_array *arr = &state->errors;
     for (; arr->read_pos < arr->count; arr->read_pos++) {
         tlisp_error *error = &arr->errors[arr->read_pos];
-        if (0 > fprintf(stream, "%.*s", error->mlen, error->message)) {
+        if (0 > fprintf(stream, "%.*s\n", error->mlen, error->message)) {
             free(error->message);
             return 1;
         }
