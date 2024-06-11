@@ -7,7 +7,10 @@
 #include "token.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
+typedef tlisp_result_t (*parse_callback_t)(tparser*);
+parse_callback_t get_callback(ttoken_t id);
 void parser_init(tparser *parser, const char *source, int len, FILE *errstream, allocator *alloc) {
     scanner_init(&parser->scanner, source, len);
     parser->alloc = alloc;
@@ -65,19 +68,84 @@ static chunk_t *current_chunk(tparser *parser) {
 static void emit_byte(tparser *parser, int byte) {
     chunk_writebyte(current_chunk(parser), byte, parser->previous.line, parser->alloc);
 }
+static void emit_bytes(tparser *parser, int byte, int byte2) {
+    emit_byte(parser,byte);
+    emit_byte(parser, byte2);
+}
 static void emit_return(tparser *parser) {
     emit_byte(parser, OP_RETURN);
+}
+static void emit_constant(tparser *parser, tlisp_value value) {
+    int pos = chunk_writeconstant(current_chunk(parser), value, parser->alloc);
+    emit_bytes(parser, OP_CONSTANT, pos);
 }
 static void end_compiler(tparser *parser) {
     emit_return(parser);
 }
 
+static tlisp_result_t parse_expr(tparser *parser) {
+    tlisp_result_t res = TLISP_RESULT_OK;
+    advance(parser);
+    ttoken *previous =  &parser->previous;
+    parse_callback_t callback = get_callback(previous->type);
+    if (callback == NULL) {
+        return error(parser, TLISP_ERR_EXPECTED_EXPRESSION, "expected expression");
+    }
+    if (!(res =callback(parser)))
+        return res;
+    return res;
+}
+static tlisp_result_t expression(tparser *parser) {
+    tlisp_result_t res = TLISP_RESULT_OK;
+    if (!(res = parse_expr(parser)))
+        return res;
+
+    return res;
+}
 tlisp_result_t parser_compile(tparser *parser, chunk_t *chunk) {
     parser->chunk = chunk;
     advance(parser); // prime the pump.
+    expression(parser);
     consume(parser, TOKEN_EOF, TLISP_ERR_EXPECTED_EOF, "expected end of file");
     end_compiler(parser);
     if (parser->had_err) 
         return TLISP_RESULT_ERR;
     return TLISP_RESULT_OK;
+}
+
+static tlisp_result_t number(tparser *parser) {
+                                ttoken *token = &parser->previous;
+    tlisp_number_t lit = strtod(token->start, NULL);
+    emit_constant(parser, lit);
+    return TLISP_RESULT_OK;
+}
+
+parse_callback_t parse_fns[] = {
+    [TOKEN_EOF] = NULL,
+    [TOKEN_PLUS] = NULL,
+    [TOKEN_MINUS] = NULL,
+    [TOKEN_STAR] = NULL,
+    [TOKEN_SLASH] = NULL,
+    [TOKEN_TICK] = NULL,
+    [TOKEN_LPAREN] = NULL,
+    [TOKEN_RPAREN] = NULL,
+    [TOKEN_EQUAL] = NULL,
+    [TOKEN_EQUAL_EQUAL] = NULL,
+    [TOKEN_GT] = NULL,
+    [TOKEN_GT_EQUAL] = NULL,
+    [TOKEN_LT] = NULL,
+    [TOKEN_LT_EQUAL] = NULL,
+    [TOKEN_BANG] = NULL,
+    [TOKEN_BANG_EQUAL] = NULL,
+    [TOKEN_STRING] = NULL,
+    [TOKEN_NUMBER] = number,
+    [TOKEN_NAME] = NULL,
+    [TOKEN_QUOTE] = NULL,
+    [TOKEN_CONS] = NULL,
+    [TOKEN_CAR] = NULL,
+    [TOKEN_TRUE] = NULL,
+    [TOKEN_FALSE] = NULL,
+};
+parse_callback_t get_callback(ttoken_t id) {
+    return parse_fns[id];
 }

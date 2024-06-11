@@ -22,6 +22,7 @@ typedef enum {
     TLISP_ERR_STACK_OVERFLOW = -3, /**< Runtime stack overflow */
     TLISP_ERR_WRNG_OPCODE = -4, /**< Runtime encountered an unknown opcode */
     TLISP_ERR_EXPECTED_EOF = -5, /**< Parser encountered unexpecded End of File */
+    TLISP_ERR_EXPECTED_EXPRESSION = -6, /**< Parser expected an expression */
 } tlisp_error_t;
 
 /** Result from a failable function */
