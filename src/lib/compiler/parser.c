@@ -102,6 +102,31 @@ static tlisp_result_t expression(tparser *parser) {
 
     return res;
 }
+static tlisp_result_t binary(tparser *parser) {
+    ttoken op = parser->previous;
+    tlisp_result_t res = TLISP_RESULT_OK;
+    if (!(res = expression(parser)))
+        return res;
+    if (!(res = expression(parser)))
+        return res;
+    switch (op.type) {
+    case TOKEN_PLUS:
+            emit_byte(parser, OP_ADD);
+        break;
+        case TOKEN_MINUS:
+        emit_byte(parser, OP_SUBTRACT);
+        break;
+        case TOKEN_STAR:
+            emit_byte(parser, OP_MULTIPLY);
+        break;
+        case TOKEN_SLASH:
+        emit_byte(parser, OP_DIVIDE);
+        break;
+        default:
+        return error_at(parser->errstream, TLISP_ERR_EXPECTED_BINARY_TOKEN, &op, "expected binary operator", &parser->panic_mode, &parser->had_err);
+    }
+    return res;
+}
 tlisp_result_t parser_compile(tparser *parser, chunk_t *chunk) {
     parser->chunk = chunk;
     advance(parser); // prime the pump.
@@ -122,10 +147,10 @@ static tlisp_result_t number(tparser *parser) {
 
 parse_callback_t parse_fns[] = {
     [TOKEN_EOF] = NULL,
-    [TOKEN_PLUS] = NULL,
-    [TOKEN_MINUS] = NULL,
-    [TOKEN_STAR] = NULL,
-    [TOKEN_SLASH] = NULL,
+    [TOKEN_PLUS] = binary,
+    [TOKEN_MINUS] = binary,
+    [TOKEN_STAR] = binary,
+    [TOKEN_SLASH] = binary,
     [TOKEN_TICK] = NULL,
     [TOKEN_LPAREN] = NULL,
     [TOKEN_RPAREN] = NULL,
