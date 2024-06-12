@@ -12,8 +12,16 @@ int main(void) {
             printf("\n");
             break;
         }
-        tlisp_state_loadbuffer(state, buffer, strlen(buffer));
-        tlisp_state_call(state, 0,0,0);
+
+        if (!tlisp_state_loadbuffer(state, buffer, strlen(buffer)))
+            goto handle_err;
+
+        if (!tlisp_state_call(state, 0,0,0))
+            goto handle_err;
+
+        continue;
+    handle_err:
+        tlisp_error_flush(state, stderr);
     }
     tlisp_state_close(state);
 }

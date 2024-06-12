@@ -1,3 +1,4 @@
+#include "core/errors.h"
 #include "state.h" // IWYU pragma: keep
 #include "stdarg.h"
 #include <stdlib.h>
@@ -18,6 +19,7 @@ int tlisp_error_flush(tlisp_state *state, FILE *stream) {
         }
         free(error->message);
     }
+    state->errors = (error_array){NULL};
     return 0;
 }
 
