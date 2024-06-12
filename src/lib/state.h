@@ -1,7 +1,7 @@
 #ifndef _TLISP_STATE_H__
 #define _TLISP_STATE_H__
 #include "arrays/chunk.h"
-#include "compiler/scanner.h"
+#include "compiler/parser.h"
 #include "core/errors.h"
 #include "core/memory.h"
 #include "core/stack.h"
@@ -12,7 +12,7 @@ struct tlisp_state {
     mem_tracker mem_usage;
     allocator allocator;
     chunk_t chunk;
-    tscanner scanner;
+    tparser parser;
     value_stack *stack;
     vm vm;
 };
