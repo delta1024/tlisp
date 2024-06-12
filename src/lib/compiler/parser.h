@@ -22,5 +22,5 @@ typedef struct  {
 
 void parser_init(tparser *parser, const char *source, int len,
                  FILE *errstream, allocator *alloc);
-tlisp_result_t compile(tparser *parser, chunk_t *chunk);
+tlisp_result_t parser_compile(tparser *parser, chunk_t *chunk);
 #endif // !_TLISP_PARSER_H__
